@@ -1,26 +1,26 @@
-import { nanoid } from "nanoid";
+'useClient'
 import { useState } from "react";
+import { nanoid } from "nanoid";
 import "./TaskManager.css";
 
-// TODO: create custom hook to manage task state
-export const TaskManager = () => {
-  const [title, setTitle] = useState("");
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [tasks, setTasks] = useState([]);
+interface Task {
+  id: string;
+  title: string;
+}
 
-  // remove task from list
-  const completeTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+export const TaskManager: React.FC = () => {
+  const [title, setTitle] = useState<string>("");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const completeTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
-  const updateTask = (id, taskUpdate) => {
-    const newTasks = tasks.slice();
-
-    const index = tasks.findIndex((task) => task.id === id);
-
-    newTasks[index] = taskUpdate;
-
-    setTasks(newTasks);
+  const updateTask = (id: string, updatedTask: Partial<Task>) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === id ? { ...task, ...updatedTask } : task))
+    );
   };
 
   const addTask = () => {
@@ -28,21 +28,21 @@ export const TaskManager = () => {
       return;
     }
 
-    const newTask = {
-      // using nanoid to generate unique id
+    const newTask: Task = {
       id: nanoid(),
       title,
     };
-    setTasks((prev) => prev.concat(newTask));
+
+    setTasks((prevTasks) => [...prevTasks, newTask]);
     setTitle("");
   };
 
-  const handleSearch = (ev) => {
+  const handleSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(ev.target.value);
   };
 
   const filteredTasks = tasks.filter((task) =>
-    task.title.toLowerCase().includes(searchKeyword.toLowerCase()),
+    task.title.toLowerCase().includes(searchKeyword.toLowerCase())
   );
 
   return (
@@ -61,7 +61,6 @@ export const TaskManager = () => {
             setTitle(ev.target.value);
           }}
         />
-
         <button onClick={addTask}>Add Task</button>
       </div>
 
