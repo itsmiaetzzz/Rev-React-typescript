@@ -22,7 +22,10 @@ const useTaskManager = () => {
 
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
-
+  const completeTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+  
   const deleteTask = (id: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
@@ -41,7 +44,7 @@ const useTaskManager = () => {
     task.title.toLowerCase().includes(searchKeyword.toLowerCase())
   );
 
-  return { tasks: filteredTasks, addTask, deleteTask, updateTask, handleSearch };
+  return { tasks: filteredTasks, addTask, completeTask, deleteTask, updateTask, handleSearch , searchKeyword};
 };
 
 export default useTaskManager;

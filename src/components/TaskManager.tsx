@@ -1,5 +1,5 @@
-import React from "react";
-import useTaskManager from "./useTaskManager";
+import React, { useState } from "react";
+import useTaskManager from "./UseTaskManager";
 import "./TaskManager.css";
 
 export const TaskManager: React.FC = () => {
@@ -11,6 +11,13 @@ export const TaskManager: React.FC = () => {
     handleSearch,
     searchKeyword,
   } = useTaskManager();
+
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+
+  const handleClick = () => {
+    addTask(newTaskTitle);
+    setNewTaskTitle(""); 
+  };
 
   return (
     <div className="container">
@@ -28,10 +35,10 @@ export const TaskManager: React.FC = () => {
       <div className="task">
         <input
           type="text"
-          value={tasks}
-          onChange={(e) => updateTask(e.target.value)}
+          value={newTaskTitle}
+          onChange={(e) => setNewTaskTitle(e.target.value)}
         />
-        <button onClick={addTask}>Add Task</button>
+        <button onClick={handleClick}>Add Task</button>
       </div>
 
       <ul className="container">
